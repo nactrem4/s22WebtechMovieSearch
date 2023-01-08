@@ -14,18 +14,26 @@ import java.util.List;
 @RestController
 public class MovieController {
     private final MovieService movieService;
-    public MovieController(MovieService movieService){
+
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
 
     @GetMapping(path = "/api/v1/movies")
-    public ResponseEntity<List<Movie>>  fetchMovies(){
+    public ResponseEntity<List<Movie>> fetchMovies() {
         return ResponseEntity.ok(movieService.findAll());
-            }
+    }
+
     @GetMapping(path = "/api/v1/movies/{id}")
-    public ResponseEntity<Movie> fetchPersonById(@PathVariable Long id) {
+    public ResponseEntity<Movie> fetchMovieById(@PathVariable Long id) {
         var movie = movieService.findById(id);
-        return movie != null? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
+        return movie != null ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(path = "/api/v1/movies/getthreelatest")
+    public ResponseEntity<List<Movie>> getThreeLatestMovies() {
+        var movies = movieService.getThreeLatestMovies();
+        return movies != null ? ResponseEntity.ok(movies) : ResponseEntity.notFound().build();
     }
 
     @PostMapping(path = "/api/v1/movies")
@@ -41,12 +49,13 @@ public class MovieController {
     @PutMapping(path = "/api/v1/movies/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody MovieManipulationRequest request) {
         var movie = movieService.update(id, request);
-        return movie != null? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
+        return movie != null ? ResponseEntity.ok(movie) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping(path = "/api/v1/movies/{id}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
         boolean successful = movieService.deleteById(id);
-        return successful? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return successful ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+
 }

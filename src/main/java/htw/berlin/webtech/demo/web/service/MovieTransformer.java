@@ -12,6 +12,8 @@ public class MovieTransformer {
         return new Movie(
                 movieEntity.getId(),
                 movieEntity.getFilmName(),
-                movieEntity.getSchauSpielerName());
+                movieEntity.getSchauSpielerName(),
+                movieEntity.getReleaseDate(),
+                movieEntity.getImagePath());
     }
 }

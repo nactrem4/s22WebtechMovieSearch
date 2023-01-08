@@ -5,6 +5,7 @@ import htw.berlin.webtech.demo.persistence.MovieEntity;
 import htw.berlin.webtech.demo.persistence.MovieRepository;
 import htw.berlin.webtech.demo.web.api.MovieManipulationRequest;
 import htw.berlin.webtech.demo.web.api.Movie;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,10 +16,12 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final MovieTransformer movieTransformer;
+
     public MovieService(MovieRepository movieRepository, MovieTransformer movieTransformer) {
         this.movieRepository = movieRepository;
         this.movieTransformer = movieTransformer;
     }
+
     public List<Movie> findAll() {
         List<MovieEntity> movies = movieRepository.findAll();
         return movies.stream()
@@ -32,7 +35,7 @@ public class MovieService {
     }
 
     public Movie create(MovieManipulationRequest request) {
-        var movieEntity = new MovieEntity(request.getFilmName(), request.getSchauSpielerName());
+        var movieEntity = new MovieEntity(request.getFilmName(), request.getSchauSpielerName(), request.getReleaseDate(), request.getImagePath());
         movieEntity = movieRepository.save(movieEntity);
         return transformEntity(movieEntity);
     }
@@ -64,7 +67,18 @@ public class MovieService {
         return new Movie(
                 movieEntity.getId(),
                 movieEntity.getFilmName(),
-                movieEntity.getSchauSpielerName()
+                movieEntity.getSchauSpielerName(),
+                movieEntity.getReleaseDate(),
+                movieEntity.getImagePath()
         );
+    }
+
+    public List<Movie> getThreeLatestMovies() {
+        var movies = movieRepository.findAll(Sort.by(Sort.Direction.DESC, "releaseDate"))
+                .stream()
+                .limit(3)
+                .collect(Collectors.toList());
+        var finalMoviesList = movies.stream().map(el -> transformEntity(el)).toList();
+        return finalMoviesList;
     }
 }

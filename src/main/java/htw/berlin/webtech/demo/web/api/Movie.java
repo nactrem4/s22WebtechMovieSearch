@@ -1,14 +1,20 @@
 package htw.berlin.webtech.demo.web.api;
-public class Movie{
 
+import java.util.Date;
+
+public class Movie {
     private long id;
     private String filmName;
     private String schauSpielerNamen;
+    private String imagePath;
+    private Date releaseDate;
 
-    public Movie(long id, String filmName, String schauSpielerNamen) {
+    public Movie(long id, String filmName, String schauSpielerNamen, Date releaseDate, String imagePath) {
         this.id = id;
         this.filmName = filmName;
         this.schauSpielerNamen = schauSpielerNamen;
+        this.releaseDate = releaseDate;
+        this.imagePath = imagePath;
     }
 
     public long getId() {
@@ -27,11 +33,26 @@ public class Movie{
         this.filmName = filmName;
     }
 
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Date getReleaseDate() {
+        return this.releaseDate;
+    }
+
     public String getSchauSpielerNamen() {
         return schauSpielerNamen;
     }
 
     public void setSchauSpielerNamen(String lastName) {
         this.schauSpielerNamen = schauSpielerNamen;
+    }
+
+    public String getImagePath() {
+        return this.imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
